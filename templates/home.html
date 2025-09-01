@@ -1,57 +1,73 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <h1>Smart Home Dashboard</h1>
 
 <div class="cards">
-    <!-- Bathroom -->
-    <div class="card" id="bathroom" onclick="toggleRoom('bathroom')">
-         <span class="indicator"></span>
-        <img src="https://static.vecteezy.com/system/resources/previews/010/748/843/original/bathroom-icon-design-free-vector.jpg" alt="Bathroom">
-        <h2>Bathroom💡</h2>
-        <span class="status">OFF</span>
-    </div>
+  <!-- Bathroom -->
+  <div class="card" id="bathroom" onclick="toggleRoom('bathroom')">
+    <span class="indicator"></span>
+    <img
+      src="https://static.vecteezy.com/system/resources/previews/010/748/843/original/bathroom-icon-design-free-vector.jpg"
+      alt="Bathroom"
+    />
+    <h2>Bathroom💡</h2>
+    <span class="status">OFF</span>
+  </div>
 
-    <!-- Bedroom -->
-    <div class="card" id="bedroom" onclick="toggleRoom('bedroom')">
-         <span class="indicator"></span>
-        <img src="https://cdn-icons-png.flaticon.com/512/5583/5583604.png" alt="Bedroom">
-        <h2>Bedroom💡</h2>
-        <span class="status">OFF</span>
-    </div>
+  <!-- Bedroom -->
+  <div class="card" id="bedroom" onclick="toggleRoom('bedroom')">
+    <span class="indicator"></span>
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/5583/5583604.png"
+      alt="Bedroom"
+    />
+    <h2>Bedroom💡</h2>
+    <span class="status">OFF</span>
+  </div>
 
-    <!-- Kitchen -->
-    <div class="card" id="kitchen" onclick="toggleRoom('kitchen')">
-         <span class="indicator"></span>
-        <img src="https://img.icons8.com/ios-filled/100/ffffff/kitchen.png" alt="Kitchen">
-        <h2>Kitchen💡</h2>
-        <span class="status">OFF</span>
-    </div>
+  <!-- Kitchen -->
+  <div class="card" id="kitchen" onclick="toggleRoom('kitchen')">
+    <span class="indicator"></span>
+    <img
+      src="https://img.icons8.com/ios-filled/100/ffffff/kitchen.png"
+      alt="Kitchen"
+    />
+    <h2>Kitchen💡</h2>
+    <span class="status">OFF</span>
+  </div>
 
-    <!-- Living Room -->
-    <div class="card" id="livingroom" onclick="toggleRoom('livingroom')">
-         <span class="indicator"></span>
-        <img src="https://img.icons8.com/ios-filled/100/ffffff/sofa.png" alt="Living Room">
-        <h2>Living Room💡</h2>
-        <span class="status">OFF</span>
-    </div>
+  <!-- Living Room -->
+  <div class="card" id="livingroom" onclick="toggleRoom('livingroom')">
+    <span class="indicator"></span>
+    <img
+      src="https://img.icons8.com/ios-filled/100/ffffff/sofa.png"
+      alt="Living Room"
+    />
+    <h2>Living Room💡</h2>
+    <span class="status">OFF</span>
+  </div>
 
-    <!-- Garage -->
-    <div class="card" id="garage" onclick="toggleRoom('garage')">
-         <span class="indicator"></span>
-        <img src="https://img.icons8.com/ios-filled/100/ffffff/garage.png" alt="Garage">
-        <h2>Garage💡</h2>
-        <span class="status">OFF</span>
-    </div>
+  <!-- Garage -->
+  <div class="card" id="garage" onclick="toggleRoom('garage')">
+    <span class="indicator"></span>
+    <img
+      src="https://img.icons8.com/ios-filled/100/ffffff/garage.png"
+      alt="Garage"
+    />
+    <h2>Garage💡</h2>
+    <span class="status">OFF</span>
+  </div>
 
-    <!-- Garden -->
-    <div class="card" id="garden" onclick="toggleRoom('garden')">
-         <span class="indicator"></span>
-        <img src="https://static.vecteezy.com/system/resources/previews/018/780/622/original/garden-design-color-icon-illustration-vector.jpg" alt="Garden">
-        <h2>Garden💡</h2>
-        <span class="status">OFF</span>
-    </div>
+  <!-- Garden -->
+  <div class="card" id="garden" onclick="toggleRoom('garden')">
+    <span class="indicator"></span>
+    <img
+      src="https://static.vecteezy.com/system/resources/previews/018/780/622/original/garden-design-color-icon-illustration-vector.jpg"
+      alt="Garden"
+    />
+    <h2>Garden💡</h2>
+    <span class="status">OFF</span>
+  </div>
 </div>
 
 <!-- Chat bubble -->
@@ -59,116 +75,122 @@
 
 <!-- Chat panel -->
 <div id="chat-box">
-    <header>Smart Home Assistant</header>
-    <div class="messages" id="chat-messages"></div>
+  <header>Smart Home Assistant</header>
+  <div class="messages" id="chat-messages"></div>
 
-    <div style="display:flex; align-items:center; border-top:1px solid #ddd;">
-        <textarea id="chat-input" placeholder="Type or speak..."></textarea>
-        <button id="voice-btn">🎙️</button>
-        <button onclick="sendMessage()">Send</button>
-    </div>
+  <div style="display: flex; align-items: center; border-top: 1px solid #ddd">
+    <textarea id="chat-input" placeholder="Type or speak..."></textarea>
+    <button id="voice-btn">🎙️</button>
+    <button onclick="sendMessage()">Send</button>
+  </div>
 </div>
-
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
+    // ✅ Sync function to fetch real Pi states
+    function syncStates() {
+      fetch("/status")
+        .then((res) => res.json())
+        .then((states) => {
+          for (const room in states) {
+            const card = document.getElementById(room);
+            if (!card) continue; // skip if card not in UI
+            const status = card.querySelector(".status");
 
-    // Room states
-    const roomStates = {
-        bathroom: false,
-        bedroom: false,
-        kitchen: false,
-        livingroom: false,
-        garage: false,
-        garden: false
-    };
-
-    window.toggleRoom = function(room) {
-        const card = document.getElementById(room);
-        const status = card.querySelector(".status");
-
-        // Toggle state
-        roomStates[room] = !roomStates[room];
-
-        if (roomStates[room]) {
-            card.classList.add("on");
-            status.textContent = "ON";
-        } else {
-            card.classList.remove("on");
-            status.textContent = "OFF";
-        }
-
-        // Optional: send state to backend
-        fetch("/toggle", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ room })
-        });
+            if (states[room]) {
+              card.classList.add("on");
+              status.textContent = "ON";
+            } else {
+              card.classList.remove("on");
+              status.textContent = "OFF";
+            }
+          }
+        })
+        .catch((err) => console.error("Sync error:", err));
     }
 
-    // Chat bubble toggle
+    // ✅ Toggle room and update backend
+    window.toggleRoom = function (room) {
+      fetch("/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ room }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(`${data.room} is now ${data.state}`);
+          syncStates(); // refresh after toggle
+        })
+        .catch((err) => console.error("Toggle error:", err));
+    };
+
+    // ✅ Chat bubble toggle
     const chatBubble = document.getElementById("chat-bubble");
     const chatBox = document.getElementById("chat-box");
     const chatMessages = document.getElementById("chat-messages");
     const chatInput = document.getElementById("chat-input");
     const micBtn = document.getElementById("voice-btn");
 
-    chatBubble.addEventListener("click", () => chatBox.classList.toggle("open"));
+    chatBubble.addEventListener("click", () =>
+      chatBox.classList.toggle("open")
+    );
 
-    // Send message
-    window.sendMessage = function() {
-        const text = chatInput.value.trim();
-        if (!text) return;
+    // ✅ Send chat message
+    window.sendMessage = function () {
+      const text = chatInput.value.trim();
+      if (!text) return;
 
-        appendMessage("You", text);
-        chatInput.value = "";
+      appendMessage("You", text);
+      chatInput.value = "";
 
-        setTimeout(() => {
-            const botReply = "I heard: " + text;
-            appendMessage("Bot", botReply);
-            speak(botReply);
-        }, 1000);
-    }
+      fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          const botReply = data.reply;
+          appendMessage("Bot", botReply);
+          speak(botReply);
+          syncStates(); // refresh UI after bot controls lights
+        })
+        .catch((err) => {
+          console.error("Chat error:", err);
+          appendMessage("Bot", "⚠️ Error connecting to assistant.");
+        });
+    };
 
-    function appendMessage(sender, text) {
-        const msg = document.createElement("div");
-        msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-        chatMessages.appendChild(msg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+    // ✅ Voice recognition
+    if ("webkitSpeechRecognition" in window) {
+      let recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
 
-    // Voice recognition
-    if ('webkitSpeechRecognition' in window) {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = "en-US";
+      recognition.onstart = () => micBtn.classList.add("listening");
+      recognition.onend = () => micBtn.classList.remove("listening");
 
-        recognition.onstart = () => micBtn.classList.add("listening");
-        recognition.onend = () => micBtn.classList.remove("listening");
-        recognition.onresult = (event) => {
-            const speechText = event.results[0][0].transcript;
-            chatInput.value = speechText;
-            sendMessage();
-        };
+      recognition.onresult = (event) => {
+        const speechText = event.results[0][0].transcript;
+        chatInput.value = speechText;
+        sendMessage(); // 🚀 send speech as command
+      };
 
-        recognition.onerror = (event) => {
-            console.error("Speech recognition error:", event.error);
-            micBtn.classList.remove("listening");
-        };
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        micBtn.classList.remove("listening");
+        appendMessage("Bot", "⚠️ Voice error: " + event.error);
+      };
 
-        micBtn.addEventListener("click", () => recognition.start());
+      micBtn.addEventListener("click", () => recognition.start());
     } else {
-        micBtn.style.display = "none";
+      micBtn.style.display = "none"; // hide mic if unsupported
     }
 
-    // Text-to-speech
-    function speak(text) {
-        const speech = new SpeechSynthesisUtterance(text);
-        speech.lang = "en-US";
-        window.speechSynthesis.speak(speech);
-    }
-
-});
+    // ✅ Sync on page load and every 5s
+    syncStates();
+    setInterval(syncStates, 5000);
+  });
 </script>
 
 {% endblock %}
