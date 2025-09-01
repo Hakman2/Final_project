@@ -1,0 +1,370 @@
+/* Import a modern font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #3e6fc2 0%, #0a4c97 100%);
+    color: #fff;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: url('https://i.pinimg.com/originals/fc/ac/19/fcac194ad03f8af8dfaf702db8db5b0f.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 0.1; /* adjust for subtlety */
+    z-index: -1; /* behind everything */
+}
+
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+header .logo {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+header .social-icons a {
+    margin-left: 20px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+header .social-icons a:hover {
+    color: #00f2fe;
+}
+
+/* Weather widget (moved below navbar) */
+.weather {
+    margin: 20px auto 0;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    position: relative;
+    margin: 20px 40px 0 auto; /* pushes it to the right */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    width: fit-content;
+}
+
+/* Dashboard title */
+h1 {
+    margin: 20px 0 20px;
+    font-size: 42px;
+    font-weight: 700;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+}
+
+/* Card container - grid layout */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 40px;
+    justify-items: center;
+}
+
+/* Room cards */
+.card {
+    width: 220px;
+    height: 220px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.4s, background 0.4s, box-shadow 0.4s;
+}
+
+.card:hover {
+    transform: translateY(-15px) scale(1.05);
+    background: linear-gradient(135deg, #00f2fe, #4facfe);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+}
+
+.card img {
+    width: 70px;
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+/* .card.on {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    box-shadow: 0 12px 30px rgba(0,255,100,0.6); */
+/* } */
+
+.card .status {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ff4c4c; /* OFF red */
+    transition: color 0.3s, transform 0.3s;
+}
+
+.card.on .status {
+    color: #00ff99; /* ON green */
+    transform: scale(1.1);
+}
+@keyframes lightBlink {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.5) drop-shadow(0 0 10px #00ff99); }
+}
+
+.card.on img {
+    animation: lightBlink 1s infinite;
+}
+@keyframes statusPulse {
+    0%, 100% { color: #00ff99; transform: scale(1); text-shadow: 0 0 5px #00ff99; }
+    50% { color: #00ff99; transform: scale(1.1); text-shadow: 0 0 15px #00ff99; }
+}
+
+.card.on .status {
+    animation: statusPulse 1s infinite;
+}
+.card .indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 15px;
+    height: 15px;
+    background: #ff4c4c; /* OFF red */
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255,0,0,0.5);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.card.on .indicator {
+    background: #00ff99; /* ON green */
+    box-shadow: 0 0 15px #00ff99, 0 0 30px #00ff99;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+}
+
+
+/* Chat bubble button */
+#chat-bubble {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    color: #fff;
+    padding: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 22px;
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s, background 0.3s;
+}
+
+#chat-bubble:hover {
+    transform: scale(1.2);
+}
+
+/* Chat panel */
+ #chat-box {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 25px;
+    width: 300px;
+    height: 360px;
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 20px;
+    box-shadow: -6px -6px 20px rgba(0,0,0,0.3);
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.5s ease forwards; 
+     z-index: 2000; 
+ }
+    /*Chat bubble button*/
+
+#chat-bubble {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    color: #fff;
+    padding: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 22px;
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s, background 0.3s;
+    z-index: 2000;  /* 👈 keeps it above footer */
+}
+
+ #chat-box {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 25px;
+    width: 300px;
+    height: 360px;
+    background: rgba(255, 255, 255, 0.97);
+    border-top-left-radius: 20px;
+    box-shadow: -6px -6px 20px rgba(0,0,0,0.3);
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.5s ease forwards;
+    z-index: 2000; /* 👈 keeps chat panel above footer */
+}  
+
+
+#chat-box.open {
+    display: flex;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+#chat-box header {
+    padding: 12px;
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    font-size: 14px;
+}
+
+#chat-box .messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 13px;
+    color: #333;
+}
+
+#chat-box textarea {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    font-family: 'Poppins', sans-serif;
+    resize: none;
+    border-top: 1px solid #ddd;
+    font-size: 13px;
+}
+
+#chat-box button {
+    background: #4facfe;
+    border: none;
+    padding: 10px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#chat-box button:hover {
+    background: #00f2fe;
+}
+
+    /* Mic button styles */
+    #mic-btn {
+        background: #ff4757;
+        border: none;
+        padding: 12px 16px;
+        margin: 0 5px;
+        border-radius: 50%;
+        font-size: 18px;
+        cursor: pointer;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        transition: transform 0.3s;
+    }
+
+    #mic-btn:hover {
+        transform: scale(1.1);
+    }
+
+    /* Pulse animation when listening */
+    .listening {
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+        70% { box-shadow: 0 0 0 20px rgba(255, 71, 87, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+    }
+    /* Chatbot send button */
+#chat-box button {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    border: none;
+    padding: 12px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effect */
+#chat-box button:hover {
+    background: linear-gradient(135deg, #00f2fe, #4facfe);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Click (active) effect */
+#chat-box button:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Footer styling */
+footer {
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    color: #ccc;
+}

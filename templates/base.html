@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}House Control{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">🏠 Smart Home</div>
+        <div class="social-icons">
+            <a href="https://github.com" target="_blank">GitHub</a>
+            <a href="https://google.com" target="_blank">Google</a>
+            <a href="https://facebook.com" target="_blank">Facebook</a>
+        </div>
+    </header>
+
+    <div class="weather">
+        ☀️ 28°C | Cape Coast
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Chat bubble -->
+    <div id="chat-bubble" onclick="toggleChat()">💬</div>
+    <div id="chat-box">
+        <textarea placeholder="Type your command..."></textarea>
+        <button>Send</button>
+    </div>
+
+    <script>
+        function toggleLED(room) {
+            fetch(`/toggle/${room}`)
+                .then(res => res.json())
+                .then(data => alert(`${data.room} LED is now ${data.state}`));
+        }
+
+        function toggleChat() {
+            document.getElementById("chat-box").classList.toggle("open");
+        }
+    </script>
+    <footer>
+  © 2025 Smart Home Control|  Global Code  |  GROUP 5  | Designed with ❤️
+</footer>
+
+</body>
+</html>
